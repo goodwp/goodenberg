@@ -64,6 +64,6 @@
   },
   "dist": {
     "type": "zip",
-    "url": "https://github.com/goodwp/goodenberg/releases/download/%version%/goodwp-goodenberg-%version%.zip"
+    "url": "https://github.com/goodwp/goodenberg/releases/download/%prettyVersion%/goodwp-goodenberg-%prettyVersion%.zip"
   }
 }
