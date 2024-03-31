@@ -65,7 +65,7 @@ for possible props.
 
 A TabPanel which loads its initial tab from the `tab` URL Parameter and syncs changing the tab back to the URL.
 
-### Example
+## Example
 
 ```js
 import {

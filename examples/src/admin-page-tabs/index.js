@@ -3,7 +3,8 @@ import domReady from "@wordpress/dom-ready";
 import {
     Panel,
     PanelBody,
-    __experimentalVStack as VStack, Button,
+    __experimentalVStack as VStack,
+    Button,
 } from "@wordpress/components";
 import { __ } from "@wordpress/i18n";
 import {
@@ -14,7 +15,12 @@ import {
     PostsSelect,
     TermsSelect,
 } from "@goodwp/goodenberg/components/entity-records-select";
-import { Page, Container, UrlSyncedTabPanel as TabPanel } from "@goodwp/goodenberg/admin/components";
+import {
+    AdminNotices,
+    Page,
+    Container,
+    UrlSyncedTabPanel as TabPanel,
+} from "@goodwp/goodenberg/admin/components";
 
 const TABS = [
     {
@@ -30,14 +36,20 @@ const TABS = [
                     <Panel header={"Single Record Components"}>
                         <PanelBody>
                             <PostSelect
-                                label={__("Select a post", "goodenberg-examples")}
+                                label={__(
+                                    "Select a post",
+                                    "goodenberg-examples"
+                                )}
                                 postType={"post"}
                                 value={post}
                                 onSelect={setPost}
                                 loadInitial
                             />
                             <TermSelect
-                                label={__("Select a category", "goodenberg-examples")}
+                                label={__(
+                                    "Select a category",
+                                    "goodenberg-examples"
+                                )}
                                 taxonomy={"category"}
                                 value={category}
                                 onSelect={setCategory}
@@ -50,7 +62,7 @@ const TABS = [
                             <PostsSelect
                                 label={__(
                                     "Select posts",
-                                    "goodenberg-examples",
+                                    "goodenberg-examples"
                                 )}
                                 postType={"post"}
                                 values={posts}
@@ -60,7 +72,7 @@ const TABS = [
                             <TermsSelect
                                 label={__(
                                     "Select categories",
-                                    "goodenberg-examples",
+                                    "goodenberg-examples"
                                 )}
                                 taxonomy={"category"}
                                 values={categories}
@@ -96,10 +108,9 @@ const PageActions = () => {
     );
 };
 
-
 const ExamplePage = () => {
     return (
-        <Page name="goodenberg-examples" hideNotices>
+        <Page name="goodenberg-examples">
             <Page.Header
                 title={__("Goodenberg", "goodenberg-examples")}
                 icon="info"
@@ -110,7 +121,16 @@ const ExamplePage = () => {
                 tabs={TABS}
                 initialTabName={"components"}
                 children={(Tab) => {
-                    return <Container contained style={{ marginTop: "8px" }}><Tab.Component /></Container>;
+                    return (
+                        <>
+                            <Container contained>
+                                <AdminNotices />
+                            </Container>
+                            <Container contained style={{ marginTop: "8px" }}>
+                                <Tab.Component />
+                            </Container>
+                        </>
+                    );
                 }}
             />
         </Page>
