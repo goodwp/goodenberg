@@ -1,0 +1,27 @@
+name: Publish NPM Package
+on:
+  release:
+    types: [ published ]
+jobs:
+  build_and_release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version-file: '.nvmrc'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Configure git user name and email
+        run: |
+          git config user.name "GoodWP Bot"
+          git config user.email "git@goodwp.io"
+
+      - name: Install all npm packages
+        run: npm ci
+        # Building is automatically done by "prepare" npm script.
+
+      - name: Release package
+        run: npm publish --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

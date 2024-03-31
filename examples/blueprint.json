@@ -1,0 +1,28 @@
+{
+  "$schema": "https://playground.wordpress.net/blueprint-schema.json",
+  "preferredVersions": {
+    "php": "8.1",
+    "wp": "6.4"
+  },
+  "phpExtensionBundles": [
+    "kitchen-sink"
+  ],
+  "landingPage": "/wp-admin/admin.php?page=goodenberg-examples",
+  "steps": [
+    {
+      "step": "login",
+      "username": "admin",
+      "password": "password"
+    },
+    {
+      "step": "installPlugin",
+      "pluginZipFile": {
+        "resource": "url",
+        "url": "https://github.com/goodwp/goodenberg/releases/latest/download/goodenberg-examples.zip"
+      },
+      "options": {
+        "activate": true
+      }
+    }
+  ]
+}

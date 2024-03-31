@@ -1,0 +1,95 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "6ad1261a9de2e8c9bbc0c2cee83b3416",
+    "packages": [
+        {
+            "name": "goodwp/goodenberg",
+            "version": "v0.1.0",
+            "dist": {
+                "type": "path",
+                "url": "..",
+                "reference": "ef8e9a622323ae87da81f64fb26c47e85d363291"
+            },
+            "require-dev": {
+                "automattic/vipwpcs": "^3.0",
+                "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
+                "phpcompatibility/phpcompatibility-wp": "*",
+                "roots/wordpress-no-content": "^6.4",
+                "squizlabs/php_codesniffer": "^3.0",
+                "wp-coding-standards/wpcs": "^3.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "GoodWP\\Goodenberg\\": "lib/"
+                }
+            },
+            "archive": {
+                "exclude": [
+                    ".github",
+                    "dist",
+                    "docs",
+                    "examples",
+                    "node_modules",
+                    "src",
+                    ".babelrc.js",
+                    ".eslintignore",
+                    ".eslintrc",
+                    ".gitignore",
+                    ".nvmrc",
+                    ".prettierrc.js",
+                    ".wp-env.json",
+                    "package.json",
+                    "package-lock.json",
+                    "phpcs.xml"
+                ]
+            },
+            "scripts": {
+                "phpcs": [
+                    "phpcs --standard=phpcs.xml"
+                ],
+                "phpcs:fix": [
+                    "phpcbf --standard=phpcs.xml"
+                ]
+            },
+            "license": [
+                "GPL-3.0-or-later"
+            ],
+            "authors": [
+                {
+                    "name": "Fabian Todt",
+                    "homepage": "https://goodwp.io",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Goodenberg is a library of components, helpers and examples for building modern WordPress sites and applications with\nthe block editor and all other features introduced with Gutenberg.",
+            "homepage": "https://github.com/goodwp/goodenberg",
+            "keywords": [
+                "blocks",
+                "gutenberg",
+                "wordpress",
+                "wp"
+            ],
+            "support": {
+                "issues": "https://github.com/goodwp/goodenberg/issues"
+            },
+            "transport-options": {
+                "symlink": false,
+                "relative": true
+            }
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": [],
+    "platform-dev": [],
+    "plugin-api-version": "2.3.0"
+}

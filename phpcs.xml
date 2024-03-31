@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+<ruleset xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" name="Good Slider"
+         xsi:noNamespaceSchemaLocation="https://raw.githubusercontent.com/PHPCSStandards/PHP_CodeSniffer/master/phpcs.xsd">
+
+    <description>Coding Style based on WordPress Coding Style.</description>
+
+    <!--
+    #############################################################################
+    COMMAND LINE ARGUMENTS
+    https://github.com/PHPCSStandards/PHP_CodeSniffer/wiki/Annotated-Ruleset
+    #############################################################################
+    -->
+    <arg name="extensions" value="php"/>
+
+    <file>.</file>
+
+    <!-- Exclude the Composer Vendor directory. -->
+    <exclude-pattern>/vendor/*</exclude-pattern>
+
+    <!-- Exclude the Node Modules directory. -->
+    <exclude-pattern>/node_modules/*</exclude-pattern>
+
+    <!-- Exclude Javascript files. -->
+    <exclude-pattern>/src/*</exclude-pattern>
+    <exclude-pattern>/build/*</exclude-pattern>
+
+    <!-- Strip the filepaths down to the relevant bit. -->
+    <arg name="basepath" value="."/>
+
+    <!-- Check up to 8 files simultaneously. -->
+    <arg name="parallel" value="8"/>
+
+
+    <!--
+    #############################################################################
+    SET UP THE RULESETS
+    #############################################################################
+    -->
+
+    <!-- Include the WordPress-Extra standard. -->
+    <rule ref="WordPress-Extra">
+        <!--
+        We may want a middle ground though. The best way to do this is adding the
+        entire ruleset, then rule by rule, remove ones that don't suit a project.
+        We can do this by running `phpcs` with the '-s' flag, which allows us to
+        see the names of the sniffs reporting errors.
+        Once we know the sniff names, we can opt to exclude sniffs which don't
+        suit our project like so.
+
+        The below two examples just show how you can exclude rules/error codes.
+        They are not intended as advice about which sniffs to exclude.
+        -->
+
+        <!--
+        <exclude name="WordPress.WhiteSpace.ControlStructureSpacing"/>
+        <exclude name="Modernize.FunctionCalls.Dirname.Nested"/>
+        -->
+        <!-- Allow shorthand array syntax -->
+        <exclude name="Universal.Arrays.DisallowShortArraySyntax.Found"/>
+        <!-- Not use Yoda conditions we will -->
+        <exclude name="WordPress.PHP.YodaConditions.NotYoda"/>
+        <!-- Use multiple prefixes, one for PHP, one for strings/hooks -->
+        <exclude name="WordPress.NamingConventions.PrefixAllGlobals.InvalidPrefixPassed"/>
+        <!-- Forget about file names -->
+        <exclude name="WordPress.Files.FileName"/>
+    </rule>
+
+    <!-- Let's also check that everything is properly documented. -->
+    <rule ref="WordPress-Docs"/>
+
+    <!-- Add in some extra rules from other standards. -->
+    <rule ref="Generic.Commenting.Todo"/>
+
+    <!-- Make sure we always exit after a redirect -->
+    <!--<rule ref="WordPressVIPMinimum.Security.ExitAfterRedirect"/>-->
+
+    <!-- Make sure that the proper escaping functions are being used -->
+    <!--<rule ref="WordPressVIPMinimum.Security.ProperEscapingFunction"/>-->
+
+    <!-- Check for PHP cross-version compatibility. -->
+    <!--
+    To enable this, the PHPCompatibilityWP standard needs
+    to be installed.
+    See the readme for installation instructions:
+    https://github.com/PHPCompatibility/PHPCompatibilityWP
+    For more information, also see:
+    https://github.com/PHPCompatibility/PHPCompatibility
+    -->
+    <config name="testVersion" value="8.1-"/>
+    <rule ref="PHPCompatibilityWP">
+        <include-pattern>*\.php</include-pattern>
+    </rule>
+
+
+    <!--
+    #############################################################################
+    SNIFF SPECIFIC CONFIGURATION
+    #############################################################################
+    -->
+
+    <!--
+    To get the optimal benefits of using WordPressCS, we should add a couple of
+    custom properties.
+    Adjust the values of these properties to fit our needs.
+
+    For information on additional custom properties available, check out
+    the wiki:
+    https://github.com/WordPress/WordPress-Coding-Standards/wiki/Customizable-sniff-properties
+    -->
+    <config name="minimum_wp_version" value="6.5"/>
+
+    <rule ref="WordPress.WP.I18n">
+        <properties>
+            <property name="text_domain" type="array">
+                <element value="goodenberg"/>
+                <element value="goodenberg-examples"/>
+            </property>
+        </properties>
+    </rule>
+
+    <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
+        <properties>
+            <property name="prefixes" type="array">
+                <element value="goodenberg"/>
+                <element value="goodenberg-examples"/>
+                <element value="GoodWP\Goodenberg"/>
+            </property>
+        </properties>
+    </rule>
+
+    <rule ref="WordPress.NamingConventions.ValidHookName">
+        <properties>
+            <property name="additionalWordDelimiters" value="-/."/>
+        </properties>
+    </rule>
+
+
+    <!--
+    #############################################################################
+    SELECTIVE EXCLUSIONS
+    Exclude specific files for specific sniffs and/or exclude sub-groups in sniffs.
+    #############################################################################
+    -->
+
+    <!--
+    Sometimes, you may want to exclude a certain directory, like your tests,
+    for select sniffs.
+    The below examples demonstrate how to do this.
+
+    In the example, the `GlobalVariablesOverride` rule is excluded for test files
+    as it is sometimes necessary to overwrite WP globals in test situations (just
+    don't forget to restore them after the test!).
+
+    Along the same lines, PHPUnit is getting stricter about using PSR-4 file names,
+    so excluding test files from the `WordPress.Files.Filename` sniff can be a
+    legitimate exclusion.
+
+    For more information on ruleset configuration options, check out the PHPCS wiki:
+    https://github.com/PHPCSStandards/PHP_CodeSniffer/wiki/Annotated-Ruleset
+    -->
+    <rule ref="WordPress.WP.GlobalVariablesOverride">
+        <exclude-pattern>/tests/*Test\.php</exclude-pattern>
+    </rule>
+    <rule ref="WordPress.Files.FileName">
+        <exclude-pattern>/tests/*Test\.php</exclude-pattern>
+    </rule>
+
+</ruleset>
