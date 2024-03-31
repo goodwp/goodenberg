@@ -134,6 +134,14 @@ You can also test this plugin via @wordpress/env:
 4. Open `http://localhost:8888/wp-admin` and login with `admin` / `password`
 5. Activate the plugin and open the example pages.
 
+You can also use [WordPress Playground](https://playground.wordpress.net/) to directly see the examples in a browser:
+
+1. Download the examples plugin from
+   the [latest release](https://github.com/goodwp/goodenberg/releases/latest/download/goodenberg-examples.zip).
+2. Go to https://playground.wordpress.net/
+3. Upload and activate the plugin
+4. Go to the new admin page "Goodenberg examples"
+
 ## Bugs, Issues, Security Issues, Feature Requests
 
 Visit our [GitHub Repository](https://github.com/goodwp/goodenberg).
