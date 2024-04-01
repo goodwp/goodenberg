@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.1.2 (2024-04-1)
+
+- Dev: Fix npm publishing
+
 ## v0.1.1 (2024-03-31)
 
 - Dev: Try to fix composer dist URLs
