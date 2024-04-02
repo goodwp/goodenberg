@@ -10,6 +10,8 @@ headers.
 
 - `path`: The API endpoint path to fetch data from.
 - `options`: Additional options for the API request, such as method, headers, body, etc. See apiFetch documentation.
+  Be sure to memoize these options if they are static (e.g., define outside render function, use useMemo).
+  If you define them on each render, they will trigger a new API call on each render.
 
 ## Return Value
 
@@ -23,22 +25,37 @@ The hook returns an object with the following properties:
 ## Example
 
 ```js
-import {useApiFetch} from '@goodwp/goodenberg/hooks';
+import { useApiFetch } from '@goodwp/goodenberg/hooks';
 
-const MyComponent = () => {
-    const {isLoading, respones, error} = useApiFetch('/wp/v2/posts', {});
+const BASE_OPTIONS = {
+    per_page: 10,
+}
 
-    if (isLoading) {
+// If you don't want to pass any params,
+// use an empty object defined outside render function.
+const EMPTY_OBJECT = {};
+
+const MyComponent = ({ orderBy, ...props }) => {
+    const apiParams = useMemo(() => {
+        return {
+            ...BASE_OPTIONS,
+            orderby: orderBy
+        }
+    }, [orderBy])
+    const { isLoadingPosts, postResponse, postError } = useApiFetch('/wp/v2/posts', apiParams);
+    const { response: { data, headers } } = useApiFetch('/custom/v1/endpoint', EMPTY_OBJECT);
+
+    if (isLoadingPosts) {
         return <Spinner/>;
     }
 
-    if (error) {
-        return <p>Error: {error.message}</p>;
+    if (postError) {
+        return <p>Error: {postError.message}</p>;
     }
 
     return (
         <ul>
-            {response.data.map(post => (
+            {postResponse.data.map(post => (
                 <li key={post.id}>{post.title.rendered}</li>
             ))}
         </ul>

@@ -10,7 +10,7 @@ const EMPTY_OBJECT = {};
  *
  * @param {string} url       The url to fetch.
  * @param {Object} queryArgs The query args to add to the url.
- * @param {Object} options   Additional options to pass to the apiFetch/fetch function.
+ * @param {Object} options   Additional options to pass to the apiFetch/fetch function. Be sure to memoize them.
  * @return {{isLoading: boolean, response: {data: object, headers: object}, error: Error}}
  */
 const useApiFetch = (url, queryArgs, options = EMPTY_OBJECT) => {
