@@ -109,6 +109,12 @@ React hooks to be used in your admin screens or custom blocks.
 
 Handy utility functions.
 
+- `getBlockStyle(className: string)`: Get the selected/applied block style by its classname.
+- `onBlockRegistration(blockName, namespace, callback)`: Allows hooking into the registerBlockType hook of a specific
+  block. Avoid having to check for the block name in your callback.
+- `onBlockEdit(blockName, namespace, callback, higherOrderComponent = false)`: Allows hooking into the BlockEdit hook of
+  a specific block. Avoid having to check for the block name in your callback.
+
 [More Information](src/utils/README.md)
 
 ## PHP

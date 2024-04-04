@@ -24,6 +24,57 @@ const BlockEdit = ({ attributes }) => {
 };
 ```
 
+### `onBlockRegistration(blockName, namespace, callback)`
+
+Allows hooking into the registerBlockType hook of a specific block.
+Avoid having to check for the block name in your callback.
+
+- `blockName` (string): The blockName (slug) in which to hook.
+- `namespace` (string): The namespace for the addFilter call.
+- `callback` ((settings: object) => object) The callback to the filter. Get passed the settings object and should return
+  the filtered settings object.
+
+**Example**
+
+```js
+onBlockRegistration("core/columns", "custom/columns", (settings) => {
+    return {
+        ...settings,
+        supports: {
+            spacing: false,
+            ...settings.supports,
+        }
+    }
+});
+```
+
+### `onBlockEdit(blockName, namespace, callback, higherOrderComponent = false)`
+
+Allows hooking into the BlockEdit hook of a specific block.
+Avoid having to check for the block name in your callback.
+
+- `blockName` (string): The blockName (slug) in which to hook.
+- `namespace` (string): The namespace for the addFilter call.
+- `callback` ((BlockEdit: React.ReactElement, props: object) => React.ReactElement) block edit component, gets passed
+  the original BlockEdit and any props for it.
+- `higherOrderComponent` (string|false): Whether to wrap the render in a higher order component. Can be a string to name
+  the HOC or false to not wrap it. Defaults to false.
+
+**Example**
+
+```js
+onBlockEdit("core/columns", "custom/columns", (BlockEdit, props) => {
+    return (
+        <>
+            <BlockEdit {...props} />
+            <InspectorControls>
+                <CustomControl/>
+            </InspectorControls>
+        </>
+    )
+}, "withCustomControls");
+```
+
 ## Records
 
 ### `getRecordTitle(record: EntityRecord)`
