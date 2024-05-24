@@ -1,5 +1,11 @@
 # Changelog
 
+## v0.2.0 (2024-05-24)
+
+- Feature: Add `onBlockRegistration` and `onBlockEdit` filter helpers
+- Dev: Set @wordpress packages versions to the ones shipped in WordPress 6.5
+- Docs: Suggest using useMemo for useApiFetch
+
 ## v0.1.2 (2024-04-1)
 
 - Dev: Fix npm publishing
