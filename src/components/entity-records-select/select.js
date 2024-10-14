@@ -144,7 +144,11 @@ const EntityRecordsSelect = ({
     const onValueChange = (newValues) => {
         const newIds = new Set();
         for (const newValue of newValues) {
-            const entityId = getRecordIdByEntityValue(searchResults, newValue);
+            const entityId = getRecordIdByEntityValue(
+                searchResults,
+                newValue,
+                buildOptionLabel
+            );
             if (entityId) {
                 newIds.add(entityId);
             }

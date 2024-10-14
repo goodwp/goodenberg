@@ -2,15 +2,20 @@ import { getRecordTitle } from "../../utils";
 
 /**
  * Helper function to get a records id based on user input in `FormTokenField`
- * @param {EntityRecord[]}                 records
- * @param {{id: int, name: string}|string} value
+ * @param {EntityRecord[]}                   records
+ * @param {{id: int, name: string}|string}   value
+ * @param {(record: EntityRecord) => string} [optionLabelBuilder] Callback to build labels for the options.
  * @return {int}
  */
-export const getRecordIdByEntityValue = (records, value) => {
+export const getRecordIdByEntityValue = (
+    records,
+    value,
+    optionLabelBuilder = getRecordTitle
+) => {
     // First, we check for exact match by `record.id` or case-sensitive `record.name|title` match.
     const entityId =
         value?.id ||
-        records?.find((record) => getRecordTitle(record) === value)?.id;
+        records?.find((record) => optionLabelBuilder(record) === value)?.id;
     if (entityId) {
         return entityId;
     }
@@ -26,6 +31,7 @@ export const getRecordIdByEntityValue = (records, value) => {
      */
     const valueLower = value.toLocaleLowerCase();
     return records?.find(
-        (record) => getRecordTitle(record).toLocaleLowerCase() === valueLower
+        (record) =>
+            optionLabelBuilder(record).toLocaleLowerCase() === valueLower
     )?.id;
 };
