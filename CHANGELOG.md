@@ -1,5 +1,9 @@
 # Changelog
 
+## v0.2.1 (2024-10-14)
+
+- Fix: EntityRecordsSelect with custom `buildOptionLabel` were not saving selected values.
+
 ## v0.2.0 (2024-05-24)
 
 - Feature: Add `onBlockRegistration` and `onBlockEdit` filter helpers
