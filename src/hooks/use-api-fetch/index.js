@@ -39,8 +39,10 @@ const useApiFetch = (url, queryArgs, options = EMPTY_OBJECT) => {
                     data: json,
                     headers: requestResponse.headers,
                 });
+                setError(null);
             } catch (responseError) {
                 setError(responseError);
+                setResponse(null);
             } finally {
                 setIsLoading(false);
             }
