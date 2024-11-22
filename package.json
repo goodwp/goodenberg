@@ -1,69 +1,69 @@
 {
-  "name": "@goodwp/goodenberg",
-  "description": "Goodenberg is a library of components, helpers and examples for building modern WordPress sites and applications with\nthe block editor and all other features introduced with Gutenberg.",
-  "version": "0.2.1",
-  "keywords": [
-    "wordpress",
-    "gutenberg",
-    "blocks",
-    "wp"
-  ],
-  "author": "Fabian Todt <info@goodwp.io> (https://goodwp.io)",
-  "license": "GPL-3.0-or-later",
-  "scripts": {
-    "env": "wp-env",
-    "env:start": "wp-env start",
-    "env:stop": "wp-env stop",
-    "format": "wp-scripts format ./src",
-    "lint": "wp-scripts lint-js ./src",
-    "packages-update": "wp-scripts packages-update",
-    "build": "npm run build:clean && npm run build:js",
-    "build:clean": "rm -rf dist",
-    "build:js": "babel src --out-dir dist",
-    "watch": "npm run watch:js",
-    "watch:js": "npm run build:js -- --watch",
-    "prepare": "npm run build"
-  },
-  "exports": {
-    "./admin": "./dist/admin/index.js",
-    "./admin/*": "./dist/admin/*",
-    "./components": "./dist/components/index.js",
-    "./components/*": "./dist/components/*",
-    "./hooks": "./dist/hooks/index.js",
-    "./hooks/*": "./dist/hooks/*",
-    "./utils": "./dist/utils/index.js",
-    "./utils/*": "./dist/utils/*"
-  },
-  "main": "dist/index.js",
-  "files": [
-    "src",
-    "dist"
-  ],
-  "peerDependencies": {
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.0",
-    "@wordpress/api-fetch": "^6.48.1",
-    "@wordpress/components": "^26.0.5",
-    "@wordpress/compose": "^6.28.1",
-    "@wordpress/core-data": "^6.28.7",
-    "@wordpress/data": "^9.21.1",
-    "@wordpress/element": "^5.28.1",
-    "@wordpress/hooks": "^3.51.1",
-    "@wordpress/html-entities": "^3.51.1",
-    "@wordpress/i18n": "^4.51.1",
-    "@wordpress/interface": "^5.28.5",
-    "@wordpress/notices": "^4.19.1",
-    "@wordpress/scripts": "^27.3.0",
-    "@wordpress/url": "^3.52.1",
-    "classnames": "^2.5.1",
-    "history": "^5.3.0"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.24.1",
-    "@wordpress/env": "^9.5.0",
-    "@wordpress/eslint-plugin": "^17.11.0",
-    "@wordpress/prettier-config": "^3.10.0",
-    "@wordpress/scripts": "^27.4.0",
-    "prettier": "^3.2.5"
-  }
+    "name": "@goodwp/goodenberg",
+    "description": "Goodenberg is a library of components, helpers and examples for building modern WordPress sites and applications with\nthe block editor and all other features introduced with Gutenberg.",
+    "version": "0.3.0",
+    "keywords": [
+        "wordpress",
+        "gutenberg",
+        "blocks",
+        "wp"
+    ],
+    "author": "Fabian Todt <info@goodwp.io> (https://goodwp.io)",
+    "license": "GPL-3.0-or-later",
+    "scripts": {
+        "env": "wp-env",
+        "env:start": "wp-env start",
+        "env:stop": "wp-env stop",
+        "format": "wp-scripts format ./src",
+        "lint": "wp-scripts lint-js ./src",
+        "packages-update": "wp-scripts packages-update",
+        "build": "npm run build:clean && npm run build:js",
+        "build:clean": "rm -rf dist",
+        "build:js": "babel src --out-dir dist",
+        "watch": "npm run watch:js",
+        "watch:js": "npm run build:js -- --watch",
+        "prepare": "npm run build"
+    },
+    "exports": {
+        "./admin": "./dist/admin/index.js",
+        "./admin/*": "./dist/admin/*",
+        "./components": "./dist/components/index.js",
+        "./components/*": "./dist/components/*",
+        "./hooks": "./dist/hooks/index.js",
+        "./hooks/*": "./dist/hooks/*",
+        "./utils": "./dist/utils/index.js",
+        "./utils/*": "./dist/utils/*"
+    },
+    "main": "dist/index.js",
+    "files": [
+        "src",
+        "dist"
+    ],
+    "peerDependencies": {
+        "@emotion/react": "^11.11.4",
+        "@emotion/styled": "^11.11.0",
+        "@wordpress/api-fetch": ">=6.48.1",
+        "@wordpress/components": ">=26.0.5",
+        "@wordpress/compose": ">=6.28.1",
+        "@wordpress/core-data": ">=6.28.7",
+        "@wordpress/data": ">=9.21.1",
+        "@wordpress/element": ">=5.28.1",
+        "@wordpress/hooks": ">=3.51.1",
+        "@wordpress/html-entities": ">=3.51.1",
+        "@wordpress/i18n": ">=4.51.1",
+        "@wordpress/interface": ">=5.28.5",
+        "@wordpress/notices": ">=4.19.1",
+        "@wordpress/scripts": ">=27.3.0",
+        "@wordpress/url": ">=3.52.1",
+        "classnames": "^2.5.1",
+        "history": "^5.3.0"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.24.1",
+        "@wordpress/env": "^10.12.0",
+        "@wordpress/eslint-plugin": "^21.5.0",
+        "@wordpress/prettier-config": "^4.12.0",
+        "@wordpress/scripts": "^30.5.1",
+        "prettier": "^3.2.5"
+    }
 }
