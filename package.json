@@ -1,7 +1,7 @@
 {
     "name": "@goodwp/goodenberg",
     "description": "Goodenberg is a library of components, helpers and examples for building modern WordPress sites and applications with\nthe block editor and all other features introduced with Gutenberg.",
-    "version": "0.3.0",
+    "version": "0.3.1",
     "keywords": [
         "wordpress",
         "gutenberg",
