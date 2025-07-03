@@ -1,4 +1,4 @@
-import { useState } from "@wordpress/element";
+import { useState, useMemo } from "@wordpress/element";
 import { useDebounce } from "@wordpress/compose";
 import { store as coreStore } from "@wordpress/core-data";
 import { ComboboxControl } from "@wordpress/components";
@@ -35,112 +35,149 @@ const EntityRecordSelect = ({
 
     const debouncedSetSearchTerm = useDebounce(setSearchTerm, 250);
 
-    let options = [...extraOptions];
+    // Do not build the dynamic array of all records on every useSelect call.
+    const { selectedRecord, searchRecords, initialRecords, hasLoadedRecords } =
+        useSelect(
+            (select) => {
+                const {
+                    getEntityRecords,
+                    getEntityRecord,
+                    hasFinishedResolution,
+                } = select(coreStore);
 
-    const { records, hasLoadedRecords } = useSelect(
-        (select) => {
-            const { getEntityRecords, getEntityRecord, hasFinishedResolution } =
-                select(coreStore);
+                const baseQuery = {
+                    per_page: 20,
+                    order: "asc",
+                    _fields: "id,name,title",
+                    context: "view",
+                    orderby: type === "taxonomy" ? "name" : "title",
+                    ...queryArgs,
+                };
 
-            const baseQuery = {
-                per_page: 20,
-                order: "asc",
-                _fields: "id,name,title",
-                context: "view",
-                orderby: type === "taxonomy" ? "name" : "title",
-                ...queryArgs,
-            };
-            const allRecords = [];
+                // Get the selected record if value exists
+                const existingSelectorArgs = [type, subType, value];
+                const selectedRecord = value
+                    ? getEntityRecord(...existingSelectorArgs)
+                    : null;
 
-            // Load the existing value into the options
-            const existingSelectorArgs = [type, subType, value];
-            if (value) {
-                const selectedRecord = getEntityRecord(...existingSelectorArgs);
-                if (selectedRecord) {
-                    allRecords.push({
-                        value: selectedRecord.id,
-                        label: buildOptionLabel
-                            ? buildOptionLabel(selectedRecord)
-                            : selectedRecord.title || selectedRecord.name,
-                    });
-                }
-            }
+                // Get search records if search term exists
+                const searchSelectorArgs = [
+                    type,
+                    subType,
+                    {
+                        ...baseQuery,
+                        search: searchTerm,
+                        exclude: value,
+                    },
+                ];
+                const searchRecords = searchTerm
+                    ? getEntityRecords(...searchSelectorArgs)
+                    : null;
 
-            const searchSelectorArgs = [
-                type,
-                subType,
-                {
-                    ...baseQuery,
-                    search: searchTerm,
-                    exclude: value,
-                },
-            ];
+                // Determine if we should load initial records
+                const hasSelectedOrSearchRecords =
+                    selectedRecord !== null ||
+                    (searchRecords && searchRecords.length > 0);
 
-            if (searchTerm) {
-                const searchRecords = getEntityRecords(...searchSelectorArgs);
-                if (searchRecords) {
-                    searchRecords.forEach((r) => {
-                        allRecords.push({
-                            value: r.id,
-                            label: buildOptionLabel
-                                ? buildOptionLabel(r)
-                                : r.title || r.name,
-                        });
-                    });
-                }
-            }
+                const shouldLoadInitial =
+                    !hasSelectedOrSearchRecords && loadInitial;
 
-            const shouldLoadInitial = allRecords.length === 0 && loadInitial;
-            const initialSelectorArgs = [
-                type,
-                subType,
-                {
-                    ...baseQuery,
-                },
-            ];
-            if (shouldLoadInitial) {
-                const initialRecords = getEntityRecords(...initialSelectorArgs);
-                if (initialRecords) {
-                    initialRecords.forEach((r) => {
-                        allRecords.push({
-                            value: r.id,
-                            label: buildOptionLabel
-                                ? buildOptionLabel(r)
-                                : r.title || r.name,
-                        });
-                    });
-                }
-            }
+                // Get initial records if needed
+                const initialSelectorArgs = [
+                    type,
+                    subType,
+                    {
+                        ...baseQuery,
+                    },
+                ];
+                const initialRecords = shouldLoadInitial
+                    ? getEntityRecords(...initialSelectorArgs)
+                    : null;
 
-            const hasLoadedExisting =
-                !value ||
-                hasFinishedResolution("getEntityRecord", existingSelectorArgs);
-            const hasLoadedSearch =
-                !searchTerm ||
-                hasFinishedResolution("getEntityRecords", searchSelectorArgs);
-            const hasLoadedInitial =
-                !shouldLoadInitial ||
-                hasFinishedResolution("getEntityRecords", initialSelectorArgs);
-            return {
-                records: allRecords,
-                hasLoadedRecords:
-                    hasLoadedExisting && hasLoadedSearch && hasLoadedInitial,
-            };
-        },
-        [
-            type,
-            subType,
-            searchTerm,
-            value,
-            loadInitial,
-            queryArgs,
-            buildOptionLabel,
-        ]
-    );
+                // Check if all data has loaded
+                const hasLoadedExisting =
+                    !value ||
+                    hasFinishedResolution(
+                        "getEntityRecord",
+                        existingSelectorArgs
+                    );
+                const hasLoadedSearch =
+                    !searchTerm ||
+                    hasFinishedResolution(
+                        "getEntityRecords",
+                        searchSelectorArgs
+                    );
+                const hasLoadedInitial =
+                    !shouldLoadInitial ||
+                    hasFinishedResolution(
+                        "getEntityRecords",
+                        initialSelectorArgs
+                    );
 
-    if (records && hasLoadedRecords) {
-        options = [...options, ...records];
-    }
+                return {
+                    selectedRecord,
+                    searchRecords,
+                    initialRecords,
+                    hasLoadedRecords:
+                        hasLoadedExisting &&
+                        hasLoadedSearch &&
+                        hasLoadedInitial,
+                };
+            },
+            [type, subType, searchTerm, value, loadInitial, queryArgs]
+        );
+
+    // Use useMemo to build the options array directly from the raw data
+    const options = useMemo(() => {
+        const records = [];
+
+        // Add selected record if it exists
+        if (selectedRecord) {
+            records.push({
+                value: selectedRecord.id,
+                label: buildOptionLabel
+                    ? buildOptionLabel(selectedRecord)
+                    : selectedRecord.title || selectedRecord.name,
+            });
+        }
+
+        // Add search records if they exist
+        if (searchRecords) {
+            searchRecords.forEach((record) => {
+                records.push({
+                    value: record.id,
+                    label: buildOptionLabel
+                        ? buildOptionLabel(record)
+                        : record.title || record.name,
+                });
+            });
+        }
+
+        // Add initial records if they exist
+        if (initialRecords) {
+            initialRecords.forEach((record) => {
+                records.push({
+                    value: record.id,
+                    label: buildOptionLabel
+                        ? buildOptionLabel(record)
+                        : record.title || record.name,
+                });
+            });
+        }
+
+        // Combine with extraOptions
+        if (records.length > 0 && hasLoadedRecords) {
+            return [...extraOptions, ...records];
+        }
+        return [...extraOptions];
+    }, [
+        selectedRecord,
+        searchRecords,
+        initialRecords,
+        buildOptionLabel,
+        extraOptions,
+        hasLoadedRecords,
+    ]);
 
     return (
         <ComboboxControl
