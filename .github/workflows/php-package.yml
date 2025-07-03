@@ -1,39 +1,39 @@
 name: Publish PHP Package
 on:
-  release:
-    types: [ published ]
+    release:
+        types: [ published ]
 jobs:
-  composer-package:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
+    composer-package:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v4
 
-      - name: Get Composer Cache Directory
-        id: composer-cache
-        run: |
-          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+            -   name: Get Composer Cache Directory
+                id: composer-cache
+                run: |
+                    echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - name: Build composer cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
+            -   name: Build composer cache
+                uses: actions/cache@v4
+                with:
+                    path: ${{ steps.composer-cache.outputs.dir }}
+                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-composer-
 
-      - name: Install dependencies
-        run: |
-          composer install -o -q
+            -   name: Install dependencies
+                run: |
+                    composer install -o -q
 
-      - name: Create archive name
-        id: composer-archive
-        run: echo "zip-path=goodwp-goodenberg-${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+            -   name: Create archive name
+                id: composer-archive
+                run: echo "zip-path=goodwp-goodenberg-${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
 
-      - name: Create archive
-        id: create-archive
-        run: composer archive --format=zip --file ${{ steps.composer-archive.outputs.zip-path }}
+            -   name: Create archive
+                id: create-archive
+                run: composer archive --format=zip --file ${{ steps.composer-archive.outputs.zip-path }}
 
-      - name: Upload dist archive to release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: ${{ steps.composer-archive.outputs.zip-path }}.zip
+            -   name: Upload dist archive to release
+                uses: softprops/action-gh-release@v1
+                with:
+                    files: ${{ steps.composer-archive.outputs.zip-path }}.zip

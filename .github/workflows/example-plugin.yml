@@ -1,55 +1,55 @@
 name: Build examples plugin
 
 on:
-  release:
-    types: [ published ]
+    release:
+        types: [ published ]
 
 jobs:
-  build_and_package:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
+    build_and_package:
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v4
+            -   uses: actions/setup-node@v4
+                with:
+                    node-version-file: '.nvmrc'
 
-      - name: Install library npm dependencies
-        run: npm ci
+            -   name: Install library npm dependencies
+                run: npm ci
 
-      - name: Build library dist files
-        run: npm run build
+            -   name: Build library dist files
+                run: npm run build
 
-      - name: Install all npm packages
-        working-directory: examples
-        run: npm ci
+            -   name: Install all npm packages
+                working-directory: examples
+                run: npm ci
 
-      - name: Get Composer Cache Directory
-        id: composer-cache
-        run: |
-          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+            -   name: Get Composer Cache Directory
+                id: composer-cache
+                run: |
+                    echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
 
-      - name: Build composer cache
-        uses: actions/cache@v2
-        with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-composer-
+            -   name: Build composer cache
+                uses: actions/cache@v4
+                with:
+                    path: ${{ steps.composer-cache.outputs.dir }}
+                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-composer-
 
-      - name: Install dependencies
-        working-directory: examples
-        run: |
-          composer install -o -q
+            -   name: Install dependencies
+                working-directory: examples
+                run: |
+                    composer install -o -q
 
-      - name: Build files
-        working-directory: examples
-        run: npm run build
+            -   name: Build files
+                working-directory: examples
+                run: npm run build
 
-      - name: Build plugin zip file
-        working-directory: examples
-        run: npm run plugin-zip
+            -   name: Build plugin zip file
+                working-directory: examples
+                run: npm run plugin-zip
 
-      - name: Upload dist archive to release
-        uses: softprops/action-gh-release@v1
-        with:
-          files: examples/goodenberg-examples.zip
+            -   name: Upload dist archive to release
+                uses: softprops/action-gh-release@v1
+                with:
+                    files: examples/goodenberg-examples.zip
