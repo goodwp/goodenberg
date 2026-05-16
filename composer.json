@@ -28,7 +28,7 @@
   "require-dev": {
     "roots/wordpress-no-content": "^6.4",
     "wp-coding-standards/wpcs": "^3.0",
-    "dealerdirect/phpcodesniffer-composer-installer": "^0.7",
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.7 || ^1.0",
     "phpcompatibility/phpcompatibility-wp": "*",
     "squizlabs/php_codesniffer": "^3.0",
     "automattic/vipwpcs": "^3.0"
