@@ -36,6 +36,17 @@
   "config": {
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true
+    },
+    "preferred-install": {
+      "*": "dist"
+    },
+    "policy": {
+      "advisories": {
+        "audit": "report"
+      },
+      "abandoned": {
+        "audit": "report"
+      }
     }
   },
   "scripts": {

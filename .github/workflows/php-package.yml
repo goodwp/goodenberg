@@ -2,28 +2,30 @@ name: Publish PHP Package
 on:
     release:
         types: [ published ]
+
+permissions:
+    # Required for action-gh-release
+    contents: write
+
 jobs:
     composer-package:
         runs-on: ubuntu-latest
         steps:
-            -   uses: actions/checkout@v4
-
-            -   name: Get Composer Cache Directory
-                id: composer-cache
-                run: |
-                    echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-
-            -   name: Build composer cache
-                uses: actions/cache@v4
+            -   name: Checkout repository
+                uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
                 with:
-                    path: ${{ steps.composer-cache.outputs.dir }}
-                    key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
-                    restore-keys: |
-                        ${{ runner.os }}-composer-
+                    persist-credentials: false
 
-            -   name: Install dependencies
-                run: |
-                    composer install -o -q
+            -   name: Setup PHP and tools
+                uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # v2.37.1
+                with:
+                    php-version: 8.1
+                    tools: composer:v2
+
+            -   name: Install Composer dependencies
+                uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # v4.0.0
+                with:
+                    composer-options: '--prefer-dist --no-progress'
 
             -   name: Create archive name
                 id: composer-archive
@@ -34,6 +36,6 @@ jobs:
                 run: composer archive --format=zip --file ${{ steps.composer-archive.outputs.zip-path }}
 
             -   name: Upload dist archive to release
-                uses: softprops/action-gh-release@v1
+                uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3.0.0
                 with:
                     files: ${{ steps.composer-archive.outputs.zip-path }}.zip
