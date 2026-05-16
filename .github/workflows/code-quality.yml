@@ -42,5 +42,5 @@ jobs:
 
       -   name: Run PHP CodeSniffer
           run: |
-            phpcs -- --standard=phpcs.xml --report-checkstyle=./phpcs-report.xml
+            vendor/bin/phpcs -- --standard=phpcs.xml --report-checkstyle=./phpcs-report.xml
             cs2pr ./phpcs-report.xml
