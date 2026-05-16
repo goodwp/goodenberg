@@ -36,11 +36,23 @@
   "config": {
     "allow-plugins": {
       "dealerdirect/phpcodesniffer-composer-installer": true
+    },
+    "preferred-install": {
+      "*": "dist"
+    },
+    "policy": {
+      "advisories": {
+        "audit": "report"
+      },
+      "abandoned": {
+        "audit": "report"
+      }
     }
   },
   "scripts": {
     "phpcs": "phpcs --standard=phpcs.xml",
-    "phpcs:fix": "phpcbf --standard=phpcs.xml"
+    "phpcs:fix": "phpcbf --standard=phpcs.xml",
+    "lint": "find . -type f -name '*.php' -not -path './vendor/*' -exec php -l {} \\;"
   },
   "archive": {
     "exclude": [
