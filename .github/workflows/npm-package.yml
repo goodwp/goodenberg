@@ -22,6 +22,12 @@ jobs:
           git config user.name "GoodWP Bot"
           git config user.email "git@goodwp.io"
 
+      - name: Run npm audit
+        # We want to be aware of any vulnerabilities in our dependencies, 
+        # but we don't want to fail the build because of them. 
+        # So we will just log the output of npm audit.
+        run: npm audit --omit=dev --omit=peer
+
       - name: Install all npm packages
         run: npm ci
         # Building is automatically done by "prepare" npm script.
