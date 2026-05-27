@@ -1,7 +1,7 @@
 import { useEffect } from "@wordpress/element";
 import { css, Global } from "@emotion/react";
 import styled from "@emotion/styled";
-import classnames from "classnames";
+import clsx from "clsx";
 
 import NotificationsList from "./notifications";
 
@@ -68,7 +68,7 @@ const Layout = ({ name, hideNotices, children, ...props }) => {
                 />
             )}
             <div
-                className={classnames(primaryClassName, props?.className)}
+                className={clsx(primaryClassName, props?.className)}
                 {...props}>
                 {children}
                 <PositionedNotificationsList />
