@@ -1,13 +1,20 @@
-name: Publish NPM Package (Paused)
-on:
-    release:
-        types: [published]
+name: Code Quality JS CSS
 
-permissions: {}
+on:
+    push:
+    pull_request:
+    # Allow manually triggering the workflow.
+    workflow_dispatch:
+
+permissions:
+    contents: read
 
 jobs:
-    build_and_release:
+    code-quality:
+        name: Run Code Quality Checks
         runs-on: ubuntu-latest
+        timeout-minutes: 10
+
         steps:
             - name: Checkout repository
               uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
@@ -16,11 +23,6 @@ jobs:
               with:
                   node-version-file: ".nvmrc"
                   registry-url: "https://registry.npmjs.org"
-
-            - name: Configure git user name and email
-              run: |
-                  git config user.name "GoodWP Bot"
-                  git config user.email "git@goodwp.io"
 
             - name: Run npm audit
               # We want to be aware of any vulnerabilities in our dependencies,
@@ -32,10 +34,5 @@ jobs:
               run: npm ci
               # Building is automatically done by "prepare" npm script.
 
-            - name: Release package
-              #        run: npm publish --access public
-              #        env:
-              #          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-              run: |
-                  echo "NPM publishing is disabled for now."
-                  echo "TODO: add OIDC trusted deployment."
+            - name: Lint JS
+              run: npm run lint
