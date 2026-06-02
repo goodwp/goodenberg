@@ -1,41 +1,51 @@
 name: Publish PHP Package
 on:
     release:
-        types: [published]
+        types: [ published ]
 
-permissions:
-    # Required for action-gh-release
-    contents: write
+permissions: { }
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: false
 
 jobs:
     composer-package:
+        name: Build and Publish
         runs-on: ubuntu-latest
+        permissions:
+            contents: write  # Required to upload assets to the GitHub release
         steps:
-            - name: Checkout repository
-              uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-              with:
-                  persist-credentials: false
+            -   name: Checkout repository
+                uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+                with:
+                    # Do not store git credentials in .git -> could be leaked/exposed by infected/malicious action.
+                    persist-credentials: false
 
-            - name: Setup PHP and tools
-              uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # v2.37.1
-              with:
-                  php-version: 8.1
-                  tools: composer:v2
+            -   name: Setup PHP and tools
+                uses: shivammathur/setup-php@7c071dfe9dc99bdf297fa79cb49ea005b9fcadbc # v2.37.1
+                with:
+                    php-version: 8.1
+                    tools: composer:v2
 
-            - name: Install Composer dependencies
-              uses: ramsey/composer-install@65e4f84970763564f46a70b8a54b90d033b3bdda # v4.0.0
-              with:
-                  composer-options: "--prefer-dist --no-progress"
+            -   name: Install Composer dependencies
+                run: composer install --prefer-dist --no-progress --no-cache
 
-            - name: Create archive name
-              id: composer-archive
-              run: echo "zip-path=goodwp-goodenberg-${{ github.event.release.tag_name }}" >> $GITHUB_OUTPUT
+            -   name: Create archive name
+                id: composer-archive
+                run: echo "zip-path=goodwp-goodenberg-$TAG_NAME" >> $GITHUB_OUTPUT
+                env:
+                    TAG_NAME: ${{ github.event.release.tag_name }}
 
-            - name: Create archive
-              id: create-archive
-              run: composer archive --format=zip --file ${{ steps.composer-archive.outputs.zip-path }}
-
-            - name: Upload dist archive to release
-              uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3.0.0
-              with:
-                  files: ${{ steps.composer-archive.outputs.zip-path }}.zip
+            -   name: Create archive
+                id: create-archive
+                env:
+                    ZIP_PATH: ${{ steps.composer-archive.outputs.zip-path }}
+                run: composer archive --format=zip --file "$ZIP_PATH"
+                
+            -   name: Upload dist archive to release
+                env:
+                    GH_TOKEN: ${{ github.token }}
+                    TAG_NAME: ${{ github.event.release.tag_name }}
+                    ZIP_PATH: ${{ steps.composer-archive.outputs.zip-path }}
+                run: gh release upload "$TAG_NAME" "${ZIP_PATH}.zip"
