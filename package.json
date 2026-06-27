@@ -62,9 +62,9 @@
     "devDependencies": {
         "@babel/cli": "^7.28.0",
         "@wordpress/env": "^10.38.0",
-        "@wordpress/eslint-plugin": "^25.2.0",
+        "@wordpress/eslint-plugin": "^25.4.1",
         "@wordpress/prettier-config": "^4.46.0",
-        "@wordpress/scripts": "^32.2.0",
-        "prettier": "^3.8.3"
+        "@wordpress/scripts": "^32.4.1",
+        "prettier": "^3.8.4"
     }
 }
